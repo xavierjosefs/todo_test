@@ -9,5 +9,6 @@ router.post("/", createTodo);
 router.put("/:id", updateTodo);
 router.delete("/:id", deleteTodo);
 router.patch("/:id/toggle", toggleTodoCompleted);
+router.patch("/:id/toggle-completed", toggleTodoCompleted);
 
 export default router;

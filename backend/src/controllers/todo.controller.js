@@ -49,7 +49,7 @@ export const createTodo = async (req, res) => {
 
         if(!title || !content) {
             return res.status(400).json({
-                success:!false,
+                success: false,
                 message: "Title and content are required",
             });
         }
@@ -77,16 +77,24 @@ export const createTodo = async (req, res) => {
 export const updateTodo = async (req, res) => {
     try {
         const { title, content, completed } = req.body;
+        const updates = {};
+
+        if (title !== undefined) updates.title = title;
+        if (content !== undefined) updates.content = content;
+        if (completed !== undefined) updates.completed = completed;
+
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "At least one field is required to update",
+            });
+        }
 
         const todo = await Todo.findByIdAndUpdate(
             req.params.id,
+            updates,
             {
-                title,
-                content,
-                completed,
-            },
-            {
-                returnDocument: "after",
+                new: true,
                 runValidators: true,
             }
         );
